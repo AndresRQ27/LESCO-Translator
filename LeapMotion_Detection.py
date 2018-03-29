@@ -34,9 +34,9 @@ class LeapMotionListener(Leap.Listener):
         for hand in frame.hands:
             if len(frame.hands) == 1:
                 if hand.is_left:
-                    HandGesture.wordAnalysis(frame)
-                else:
                     HandGesture.numberAnalysis(frame)
+                else:
+                    HandGesture.wordAnalysis(frame)
             else:
                 print "Two handed mode not available"
 
