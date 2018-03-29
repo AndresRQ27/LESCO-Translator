@@ -2,6 +2,7 @@ import sys
 import thread
 import time
 import Leap
+import HandGesture
 from Leap import CircleGesture, KeyTapGesture, ScreenTapGesture, SwipeGesture
 
 
@@ -30,7 +31,17 @@ class LeapMotionListener(Leap.Listener):
     def on_frame(self, controller):
         frame = controller.frame()
 
-        ###################################################################################     Test code
+        for hand in frame.hands:
+            if len(frame.hands) == 1:
+                if hand.is_left:
+                    HandGesture.wordAnalysis(frame)
+                else:
+                    HandGesture.numberAnalysis(frame)
+            else:
+                print "Two handed mode not available"
+
+
+        # Test code
         """print "Frame ID = " + str(frame.id) \
             + " Timestamp: " + str(frame.timestamp) \
             + " # of Hands: " + str(len(frame.hands)) \
