@@ -30,7 +30,7 @@ class LeapMotionListener(Leap.Listener):
     def on_frame(self, controller):
         frame = controller.frame()
 
-        ###Test code
+        ###################################################################################     Test code
         """print "Frame ID = " + str(frame.id) \
             + " Timestamp: " + str(frame.timestamp) \
             + " # of Hands: " + str(len(frame.hands)) \
