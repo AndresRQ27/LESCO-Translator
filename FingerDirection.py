@@ -15,10 +15,10 @@ def fingerOrientation(hand):
         4 = TYPE_PINKY
 
     @param hand: hand with the fingers to analyze
-    @return: a vector with the direction (up, down, left right, front) of the fingers (thumb, index, middle, ring, pinky)
+    @return: a list with the direction (up, down, left right, forward) of the fingers (thumb, index, middle, ring, pinky)
 
-    index, middle, ring, pinky can only be front, up or down
-    thumb can be front, up, left or right
+    index, middle, ring, pinky can only be forward, up or down
+    thumb can be forward, up, left or right
     """
     fingersDirection = []
     for finger in hand.fingers:
@@ -36,8 +36,8 @@ def fingerOrientation(hand):
             fingersDirection.append("left")
         elif is_right(finger.direction):
             fingersDirection.append("right")
-        elif is_front(finger.direction):
-            fingersDirection.append("front")
+        elif is_forward(finger.direction):
+            fingersDirection.append("forward")
         else:
             print "Couldn't calculate finger " + finger.type
             fingersDirection.append("null")
@@ -45,7 +45,7 @@ def fingerOrientation(hand):
     return fingersDirection
 
 
-def is_front(vector):
+def is_forward(vector):
     """
     Calculates is the finger is facing front by it's direction vector
     @param vector: contains the directions to analyze
