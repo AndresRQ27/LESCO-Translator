@@ -16,16 +16,13 @@ def fingerOrientation(hand):
 
     @param hand: hand with the fingers to analyze
     @return: a list with the direction (up, down, left right, forward) of the fingers (thumb, index, middle, ring, pinky)
-
-    index, middle, ring, pinky can only be forward, up or down
-    thumb can be forward, up, left or right
     """
     fingersDirection = []
     for finger in hand.fingers:
         # Test is_extended method
         """
         if finger.is_extended:
-            print "The finger is extended"
+            print "The finger " + finger.type + " is extended"
         """
 
         if is_up(finger.direction):
