@@ -19,11 +19,6 @@ def fingerOrientation(hand):
     """
     fingersDirection = []
     for finger in hand.fingers:
-        # Test is_extended method
-        """
-        if finger.is_extended:
-            print "The finger " + finger.type + " is extended"
-        """
 
         if is_up(finger.direction):
             fingersDirection.append("up")
@@ -36,7 +31,7 @@ def fingerOrientation(hand):
         elif is_forward(finger.direction):
             fingersDirection.append("forward")
         else:
-            print "Couldn't calculate finger " + finger.type
+            #print "Couldn't calculate finger " + finger.type
             fingersDirection.append("null")
 
     return fingersDirection
@@ -48,7 +43,10 @@ def is_forward(vector):
     @param vector: contains the directions to analyze
     @return: boolean true if correct
     """
-    return True
+    if vector.y < -0.3:
+        return True
+    else:
+        return False
 
 
 def is_left(vector):
@@ -57,7 +55,10 @@ def is_left(vector):
     @param vector: contains the directions to analyze
     @return: boolean true if correct
     """
-    return True
+    if vector.x < -0.3:
+        return True
+    else:
+        return False
 
 
 def is_right(vector):
@@ -66,7 +67,10 @@ def is_right(vector):
     @param vector: contains the directions to analyze
     @return: boolean true if correct
     """
-    return True
+    if vector.x > 0.3:
+        return True
+    else:
+        return False
 
 
 def is_up(vector):
@@ -75,7 +79,10 @@ def is_up(vector):
     @param vector: contains the directions to analyze
     @return: boolean true if correct
     """
-    return True
+    if vector.z < -0.3:
+        return True
+    else:
+        return False
 
 
 def is_down(vector):
@@ -84,4 +91,7 @@ def is_down(vector):
     @param vector: contains the directions to analyze
     @return: boolean true if correct
     """
-    return True
+    if vector.z > 0.3:
+        return True
+    else:
+        return False

@@ -113,25 +113,29 @@ def wordAnalysis(frame):
     return 0
 
 
-def numberAnalysis(fingers):
-    if fingers == ["down", "up", "down", "down", "down"]:
-        return 1
-    if fingers == ["down", "up", "up", "down", "down"]:
-        return 2
-    if fingers == ["up", "up", "up", "down", "down"]:
-        return 3
-    if fingers == ["down", "up", "up", "up", "up"]:
-        return 4
-    if fingers == ["down", "up", "up", "up", "up"]:
-        return 5
-    if fingers == ["left", "up", "up", "up", "down"]:  # TODO thumb could be up or left
-        return 6
-    if fingers == ["left", "up", "up", "down", "up"]:
-        return 7
-    if fingers == ["left", "up", "down", "up", "up"]:
-        return 8
-    if fingers == ["left", "down", "up", "up", "up"]:
-        return 9
-    if fingers == ["up", "down", "down", "down", "down"]:
-        return 1
-    return 0
+def numberAnalysis(frame):
+    if str(frame.hands[0]) != "Invalid Hand":
+        fingersDirection = FingerDirection.fingerOrientation(frame.hands[0])
+        thumb_extended = frame.hands[0].fingers[0].is_extended
+        if fingersDirection == ["up", "up", "down", "down", "down"]:
+            print 1
+        elif fingersDirection == ["up", "up", "up", "down", "down"] and not thumb_extended:
+            print 2
+        elif fingersDirection == ["up", "up", "up", "down", "down"]:
+            print 3
+        elif fingersDirection == ["up", "up", "up", "up", "up"] and not thumb_extended:
+            print 4
+        elif fingersDirection == ["up", "up", "up", "up", "up"]:
+            print 5
+        elif fingersDirection == ["up", "up", "up", "up", "down"] and not thumb_extended:
+            print 6
+        elif fingersDirection == ["up", "up", "up", "down", "up"] and not thumb_extended:
+            print 7
+        elif fingersDirection == ["up", "up", "down", "up", "up"] and not thumb_extended:
+            print 8
+        elif fingersDirection == ["up", "down", "up", "up", "up"] and not thumb_extended:
+            print 9
+        elif fingersDirection == ["up", "down", "down", "down", "down"]: #TODO: implementar movimiento
+            print 10
+    else:
+        print "Invalid Hand"
