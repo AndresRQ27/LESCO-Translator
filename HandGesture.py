@@ -33,8 +33,11 @@ def wordAnalysis(frame):
                                 letter = "a"  # Thumb a little apart
                             else:
                                 letter = "o"  # Fingers completely in front of the camera
-                    elif fingersDirection[4] == "up" and not thumb_extended:
-                        letter = "i"  # TODO if there is speed, it's a j
+                    elif fingersDirection[4] == "up":
+                        if not thumb_extended:
+                            letter = "i"  # TODO if there is speed, it's a j
+                        else:
+                            letter = "y"
 
         elif fingersDirection[1] == "up":
             if fingersDirection[2] == "down":
@@ -84,29 +87,28 @@ def wordAnalysis(frame):
                     if fingersDirection[4] == "forward":
                         letter = "e"  # Tilted slightly back, maybe confuse with a
 
-    elif fingersDirection[0] == "right":
-        if fingersDirection[1] == "down":
-            if fingersDirection[2] == "down":
+            elif fingersDirection[2] == "down":
                 if fingersDirection[3] == "down":
                     if fingersDirection[4] == "down":
-                        letter = "e"  # TODO different for m or s (maybe s y backwards)
-
-                elif fingersDirection[3] == "null":  # in case of not detected, else implement backwards
-                    letter = "q"
+                        letter = "x"
 
     elif fingersDirection[0] == "forward":
         if fingersDirection[1] == "forward":
             if fingersDirection[2] == "forward":
                 if fingersDirection[3] == "forward":
                     if fingersDirection[4] == "forward":
-                        letter = "c"  # Gotta get close to recognize them right
+                        letter = "c"  # Gotta get close to recognize them right & maybe confused with e
 
             elif fingersDirection[2] == "down":
                 letter = "p"
 
-    elif fingersDirection[1] == "left":
-        if fingersDirection[2] == "left":  # Maybe a problem
+    elif fingersDirection[1] == "left":  # INDEX FINGER, no thumb
+        if fingersDirection[2] == "left":
             letter = "h"
+        elif fingersDirection[2] == "down":
+            if fingersDirection[3] == "down":
+                if fingersDirection[4] == "down":
+                    letter == "p"  # Must be way above the camera
         else:
             letter = "g"
         # Do it slightly under the camera
@@ -118,11 +120,10 @@ def wordAnalysis(frame):
                     if fingersDirection[4] == "down":
                         letter = "x"
 
-        elif fingersDirection[1] == "down":
-            if fingersDirection[2] == "down":
-                if fingersDirection[3] == "down":
-                    if fingersDirection[4] == "right":
-                        letter = "y"
+    elif fingersDirection[0] == "down":
+        if fingersDirection[1] == "down":
+            if frame.hands[0].fingers[1].is_extended and not fingersDirection[4] == "down":
+                letter = "q"
 
     # Z is left for its movement
     return letter
@@ -151,6 +152,9 @@ def numberAnalysis(frame):
     elif fingersDirection == ["up", "down", "up", "up", "up"] and not thumb_extended:
         number = "9"
     elif fingersDirection == ["up", "down", "down", "down", "down"]:  # TODO: implementar movimiento
-        number = "10"
+        if frame.hands[0].fingers[0].tip_position.x < frame.hands[0].fingers[1].tip_position.x:
+            number = "s"
+        else:
+            number = "10"
 
     return number
