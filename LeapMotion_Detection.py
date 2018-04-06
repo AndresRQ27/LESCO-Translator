@@ -3,7 +3,10 @@ import thread
 import time
 import Leap
 import HandGesture
-from Leap import CircleGesture, KeyTapGesture, ScreenTapGesture, SwipeGesture
+
+# global variables
+frame_counter = 0
+last_object = "null"
 
 class LeapMotionListener(Leap.Listener):
     finger_names = ['Thumb', 'Index', 'Middle', 'Ring', 'Pinky']
@@ -28,16 +31,30 @@ class LeapMotionListener(Leap.Listener):
         print "Exited"
 
     def on_frame(self, controller):
+        global frame_counter, last_object
         frame = controller.frame()
-
         for hand in frame.hands:
+            returnValue = "null"
             if len(frame.hands) == 1:
                 if hand.is_left:
-                    HandGesture.numberAnalysis(frame)
+                    returnValue = HandGesture.numberAnalysis(frame)
+                    objectVerify = "number"
                 else:
-                    HandGesture.wordAnalysis(frame)
+                    returnValue = HandGesture.wordAnalysis(frame)
+                    objectVerify = "letter"
             else:
                 print "Two handed mode not available"
+
+            # Validates object during a frame of time
+            if last_object != returnValue:
+                if returnValue != "null":
+                    print returnValue
+                last_object = returnValue
+                frame_counter = 0
+            elif last_object != "null":
+                frame_counter += 1
+                if frame_counter == 180:
+                    print ("Your " + objectVerify + " is: " + returnValue)
 
         # Test code
         """
