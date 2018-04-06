@@ -22,31 +22,39 @@ def fingerOrientation(hand):
 
         if is_up(finger.direction):
             fingersDirection.append("up")
+        elif is_forward(finger):
+            fingersDirection.append("forward")
         elif is_down(finger.direction):
             fingersDirection.append("down")
         elif is_left(finger.direction):
             fingersDirection.append("left")
         elif is_right(finger.direction):
             fingersDirection.append("right")
-        elif is_forward(finger.direction):
-            fingersDirection.append("forward")
         else:
             #print "Couldn't calculate finger " + finger.type
             fingersDirection.append("null")
 
+        #print fingersDirection[len(fingersDirection)-1]
+
     return fingersDirection
 
 
-def is_forward(vector):
+def is_forward(finger):
     """
     Calculates is the finger is facing front by it's direction vector
     @param vector: contains the directions to analyze
     @return: boolean true if correct
     """
-    if vector.y < -0.3:
-        return True
+    if finger.hand.is_left:
+        if finger.direction.y < -0.9:
+            return True
+        else:
+            return False
     else:
-        return False
+        if finger.direction.y < -0.75:
+            return True
+        else:
+            return False
 
 
 def is_left(vector):
