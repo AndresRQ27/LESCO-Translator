@@ -128,6 +128,12 @@ def wordAnalysis(frame):
     # Z is left for its movement
     return letter
 
+#need to check weatehr radians or deegres
+def rotHand(frame):
+    side = frame.hand.roll
+    if side > 90:
+        return "left"
+    return "right"
 
 def numberAnalysis(frame):
     number = "null"
