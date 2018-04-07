@@ -2,6 +2,7 @@
 import sys
 import thread
 import time
+import Commands
 import Leap
 import HandGesture
 from Leap import CircleGesture, SwipeGesture, KeyTapGesture, ScreenTapGesture
@@ -11,6 +12,8 @@ frame_counter = 0  # int that counts the frame that have passed since a letter h
 last_object = "null"  # string that contains the letter returned from the previous identification
 nx_counter = 0  # int that counts the times that a "x" has been after a "n" to recognize the letter "ñ"
 repeated_flag = False  # boolean that indicates if a word or double letter is still in the "cache" (that keeps sending the same)
+sentence = []  # array of the words detected to make a phrase
+command_executed = False
 
 
 class LeapMotionListener(Leap.Listener):
@@ -38,36 +41,36 @@ class LeapMotionListener(Leap.Listener):
     def on_frame(self, controller):
         frame = controller.frame()
 
-        global frame_counter, last_object, nx_counter, repeated_flag
+        global frame_counter, last_object, nx_counter, repeated_flag, sentence, command_executed
 
-        for hand in frame.hands:
+        if len(frame.hands) != 0:
             returnValue = "null"
             if len(frame.hands) == 1:
-                if hand.is_left:
+                if frame.hands[0].is_left:
                     returnValue = HandGesture.numberAnalysis(frame)
-                    if returnValue != "s":
-                        objectVerify = "number"
-                    else:
-                        objectVerify = "letter"  # Special case for letter S
                 else:
                     returnValue = HandGesture.wordAnalysis(frame)
-                    objectVerify = "letter"
-            else:
-                print "Two handed mode not available"
+            elif len(frame.hands) == 2 and not command_executed:
+                frame_counter += 1
+                if frame_counter == 200:
+                    sentence = Commands.analyzer(frame.hands, sentence)
+                    frame_counter = 0
 
             # print returnValue
             # Validates object during a frame of time
             if not returnValue == "null":
-                if len(returnValue) > 1 and len(last_object) < 2 and returnValue != "ch":  # All letters and numbers that utilizes gestures
-                    frame_counter = 0
+                if len(returnValue) > 1 and len(last_object) < 2 and returnValue != "ch" and returnValue != "10":
+                    frame_counter = 0                           # All letters and numbers that utilizes gestures
                     repeated_flag = True                        # have more than one  char(except z)
                     last_object = returnValue
-                    print ("Your " + objectVerify + " is: " + returnValue)
+                    print ("Recorded: " + returnValue)
+                    sentence.append(returnValue)
                 elif last_object != returnValue:  # Doubtful method of detecting ñ
                     if nx_counter == 3:
                         returnValue = "ñ"
                         nx_counter = 0
-                        print ("Your " + objectVerify + " is: " + returnValue)
+                        print ("Recorded: " + returnValue)
+                        sentence.append(returnValue)
                     elif returnValue == "n" and last_object == "x":
                         nx_counter += 1
                     elif len(returnValue) < 2 or returnValue == "ch":
@@ -81,7 +84,8 @@ class LeapMotionListener(Leap.Listener):
                     frame_counter += 1
                     if frame_counter == 200:
                         frame_counter = 0
-                        print ("Your " + objectVerify + " is: " + returnValue)
+                        print ("Recorded: " + returnValue)
+                        sentence.append(returnValue)
 
         # Test code
 

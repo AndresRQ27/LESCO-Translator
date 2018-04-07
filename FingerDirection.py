@@ -31,7 +31,6 @@ def fingerOrientation(hand):
         elif is_right(finger.direction):
             fingersDirection.append("right")
         else:
-            #print "Couldn't calculate finger " + finger.type
             fingersDirection.append("null")
 
         # print fingersDirection[len(fingersDirection)-1]
