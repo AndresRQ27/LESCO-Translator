@@ -143,7 +143,9 @@ def numberAnalysis(frame):
     number = "null"
     fingersDirection = FingerDirection.fingerOrientation(frame.hands[0])
     thumb_extended = frame.hands[0].fingers[0].is_extended
-    if fingersDirection == ["up", "up", "down", "down", "down"]:
+    if fingersDirection == ["up","down","down","down","down"]:
+        number = "0"
+    elif fingersDirection == ["up", "up", "down", "down", "down"]:
         number = "1"
     elif fingersDirection == ["up", "up", "up", "down", "down"] and not thumb_extended:
         number = "2"
@@ -165,6 +167,7 @@ def numberAnalysis(frame):
         if frame.hands[0].fingers[0].tip_position.x < frame.hands[0].fingers[1].tip_position.x:
             number = "s"
         else:
+            time.sleep(10)
             number = "10"
 
     return number

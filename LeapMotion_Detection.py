@@ -75,7 +75,6 @@ class LeapMotionListener(Leap.Listener):
                         nx_counter += 1
                     elif len(returnValue) < 2 or returnValue == "ch":
                         print returnValue
-
                     repeated_flag = False
                     last_object = returnValue
                     frame_counter = 0

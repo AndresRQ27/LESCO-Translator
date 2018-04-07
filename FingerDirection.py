@@ -102,14 +102,4 @@ def is_down(vector):
         return True
     else:
         return False
-    
-def swipeDir(gesture):
-    swipedir = []
-    if swipe.direction[1] > 0 :
-        swipedir.append("right")
-    else:
-        swipedir.append("left")
-    if swipe.direction[3] > 0 :
-        swipe.append("up")
-    else:
-        swipedir.append("down")
+
