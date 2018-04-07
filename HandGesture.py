@@ -1,7 +1,6 @@
 # coding=utf-8
-from threading import Timer
-
 import Leap
+from Leap import CircleGesture, SwipeGesture, KeyTapGesture, ScreenTapGesture
 import FingerDirection
 
 def wordAnalysis(frame):
@@ -45,6 +44,9 @@ def wordAnalysis(frame):
                     if fingersDirection[4] == "down":  # Gotta get close to recognize them right
                         if thumb_extended:
                             letter = "l"  # TODO: implement gesture for LL
+                            if frame.gestures()[0].type == Leap.Gesture.TYPE_SWIPE:
+                                letter = "ll"
+
                         elif frame.hands[0].fingers[2].tip_position.z > frame.hands[0].palm_position.z:
                             letter = "k"
                         else:
@@ -57,10 +59,12 @@ def wordAnalysis(frame):
                                - frame.hands[0].fingers[2].tip_position.x) > 30:
                             letter = "v"
                         elif abs(frame.hands[0].fingers[1].tip_position.x
-                                 - frame.hands[0].fingers[2].tip_position.x) > 8:
+                                 - frame.hands[0].fingers[2].tip_position.x) > 15:
                             letter = "u"  # Different for v and r
                         else:
                             letter = "r"  # Slightly tilted to the front to see the tips
+                            if frame.gestures()[0].type == Leap.Gesture.TYPE_SWIPE:
+                                letter = "rr"
                 elif fingersDirection[3] == "up":
                     if fingersDirection[4] == "down":
                         letter = "w"
