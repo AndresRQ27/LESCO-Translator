@@ -50,7 +50,7 @@ def is_forward(finger):
         else:
             return False
     else:
-        if finger.direction.y < -0.75:
+        if finger.direction.y < -0.80:
             return True
         else:
             return False

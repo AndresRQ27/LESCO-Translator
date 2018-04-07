@@ -11,7 +11,7 @@ from Leap import CircleGesture, SwipeGesture, KeyTapGesture, ScreenTapGesture
 frame_counter = 0  # int that counts the frame that have passed since a letter hasn't change
 last_object = "null"  # string that contains the letter returned from the previous identification
 nx_counter = 0  # int that counts the times that a "x" has been after a "n" to recognize the letter "ñ"
-repeated_flag = False  # boolean that indicates if a word or double letter is still in the "cache" (that keeps sending the same)
+saved_flag = False  # boolean that indicates if a word or double letter is still in the "cache" (that keeps sending the same)
 sentence = []  # array of the words detected to make a phrase
 command_executed = False
 
@@ -41,7 +41,7 @@ class LeapMotionListener(Leap.Listener):
     def on_frame(self, controller):
         frame = controller.frame()
 
-        global frame_counter, last_object, nx_counter, repeated_flag, sentence, command_executed
+        global frame_counter, last_object, nx_counter, saved_flag, sentence
 
         if len(frame.hands) != 0:
             returnValue = "null"
@@ -59,32 +59,38 @@ class LeapMotionListener(Leap.Listener):
             # print returnValue
             # Validates object during a frame of time
             if not returnValue == "null":
-                if len(returnValue) > 1 and len(last_object) < 2 and returnValue != "ch" and returnValue != "10":
-                    frame_counter = 0                           # All letters and numbers that utilizes gestures
-                    repeated_flag = True                        # have more than one  char(except z)
-                    last_object = returnValue
-                    print ("Recorded: " + returnValue)
-                    sentence.append(returnValue)
-                elif last_object != returnValue:  # Doubtful method of detecting ñ
+                if last_object != returnValue:  # Doubtful method of detecting ñ
                     if nx_counter == 3:
                         returnValue = "ñ"
                         nx_counter = 0
-                        print ("Recorded: " + returnValue)
-                        sentence.append(returnValue)
+                        if not saved_flag:
+                            print ("Recorded: " + returnValue)
+                            sentence.append(returnValue)
+                            saved_flag = True
                     elif returnValue == "n" and last_object == "x":
                         nx_counter += 1
-                    elif len(returnValue) < 2 or returnValue == "ch":
+                    else:
                         print returnValue
-                    repeated_flag = False
+
                     last_object = returnValue
                     frame_counter = 0
+                    saved_flag = False
 
                 else:
-                    frame_counter += 1
+
+                    if last_object == "j":
+                        frame_counter += 10
+                    elif returnValue == "10":
+                        frame_counter = 200
+                    else:
+                        frame_counter += 1
+
                     if frame_counter == 200:
                         frame_counter = 0
-                        print ("Recorded: " + returnValue)
-                        sentence.append(returnValue)
+                        if not saved_flag:
+                            print ("Recorded: " + returnValue)
+                            sentence.append(returnValue)
+                            saved_flag = True
 
         # Test code
 
@@ -139,7 +145,14 @@ class LeapMotionListener(Leap.Listener):
                 swipe = SwipeGesture(gesture)
                 print "Type: Swipe ID: " + str(swipe.id) + " State: " + self.state_names[gesture.state] \
                       + " Position: " + str(swipe.position) + " Direction: " + str(swipe.direction) \
-                      + " Speed (mm/s): " + str(swipe.speed)"""
+                      + " Speed (mm/s): " + str(swipe.speed)
+
+            if gesture.type == Leap.Gesture.TYPE_SCREEN_TAP:
+                print "Type: Screen Tap"
+
+            if gesture.type == Leap.Gesture.TYPE_KEY_TAP:
+                print "Type: Key Tap"
+                """
 
 
 
