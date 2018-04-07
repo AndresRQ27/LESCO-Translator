@@ -9,22 +9,46 @@ def loadImage(name):
     imagen = PhotoImage (file = ruta)
     return imagen
 
+#Muestra la palabra final en su textbox
 def showWord(word):
     Text_word.config(state=NORMAL)
     Text_word.delete(0.0, 'end')
     Text_word.insert(0.0, word)
     Text_word.config(state=DISABLED)
 
+#Muestra el vector del gesto realizado por el usuario
+def showCurrentVector(word):
+    Text_received.config(state=NORMAL)
+    Text_received.delete(0.0, 'end')
+    Text_received.insert(0.0, word)
+    Text_received.config(state=DISABLED)
+
+#Muestra el vector contra el que se esta comparando
+def showVectorRegistered(word):
+    Text_comparing.config(state=NORMAL)
+    Text_comparing.delete(0.0, 'end')
+    Text_comparing.insert(0.0, word)
+    Text_comparing.config(state=DISABLED)
+
+#Agrega la letra a la lista de comparaciones fallidas
 def addToOldComparaciones(word):
     Text_wrongComparing.config(state=NORMAL)
     Text_wrongComparing.insert(0.0, " " + word)
     Text_wrongComparing.config(state=DISABLED)
 
+#Resetea el textbox usado para mostrar antiguas comparaciones
+def resetOldComparaciones():
+    Text_wrongComparing.config(state=NORMAL)
+    Text_wrongComparing.delete(0.0, 'end')
+    Text_wrongComparing.config(state=DISABLED)
+
+#Agrega la palabra al registro de la conversacion
 def addToChat(word):
     Text_chat.config(state=NORMAL)
     Text_chat.insert(0.0, "\n" + word)
     Text_chat.config(state=DISABLED)
 
+#Reproduce sonido en windows
 def speakWINDOWS(word):
     try:
         if (isinstance(word,str) or isinstance(word,int)):
@@ -35,6 +59,7 @@ def speakWINDOWS(word):
     except Exception:
         raise
 
+#Reproduce sonido en mac
 def speakMAC(word):
     try:
         if (isinstance(word,str) or isinstance(word,int)):
@@ -45,6 +70,7 @@ def speakMAC(word):
     except Exception:
         raise
 
+#Recibe la lista con las letras y procesa esto para su interpretacion
 def procesar(lista):
     if(lista!=[]):
         size= len(lista)
@@ -59,13 +85,16 @@ def procesar(lista):
         speakWINDOWS(word)
     else:
         print("empty list")
-    
+
+#Indicador de similitud en el vector recibido    
 def showSame():
     status_canvas.config(bg='#006600')
-    
+
+#Indicador de diferencia en el vector recibido    
 def showDiferent():
     status_canvas.config(bg='#BB0000')
 
+#Reset del indicador visual
 def showReset():
     status_canvas.config(bg='#000000')
 
