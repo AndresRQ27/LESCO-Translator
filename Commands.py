@@ -6,14 +6,15 @@ def analyzer(hands, sentence):
     firstHandDirection = FingerDirection.fingerOrientation(hands[0])
     secondHandDirection = FingerDirection.fingerOrientation(hands[1])
 
-    if firstHandDirection == ["up", "down", "down", "down", "down"]:
-        if secondHandDirection == ["up", "down", "down", "down", "down"]:
-            handsClose(sentence)
-            sentence = []
+    if hands[0].palm_position.y < 400 or hands[1].palm_position.y < 400:
+        if firstHandDirection == ["up", "down", "down", "down", "down"]:
+            if secondHandDirection == ["up", "down", "down", "down", "down"]:
+                handsClose(sentence)
+                sentence = []
 
-        elif secondHandDirection == ["up", "up", "up", "up", "up"]:
-            handClose_handUp(sentence)
-            print str(sentence)
+            elif secondHandDirection == ["up", "up", "up", "up", "up"]:
+                handClose_handUp(sentence)
+                print str(sentence)
 
     return sentence
 

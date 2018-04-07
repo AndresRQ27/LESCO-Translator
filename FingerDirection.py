@@ -33,7 +33,7 @@ def fingerOrientation(hand):
         else:
             fingersDirection.append("null")
 
-        # print fingersDirection[len(fingersDirection)-1]
+        #print fingersDirection[len(fingersDirection)-1]
 
     return fingersDirection
 

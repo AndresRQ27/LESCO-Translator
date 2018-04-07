@@ -16,6 +16,7 @@ sentence = []  # array of the words detected to make a phrase
 command_executed = False
 
 
+
 class LeapMotionListener(Leap.Listener):
     finger_names = ['Thumb', 'Index', 'Middle', 'Ring', 'Pinky']
     bones_names = ['Metacarpal', 'Proximal', 'Intermediate', 'Distal']
@@ -45,11 +46,17 @@ class LeapMotionListener(Leap.Listener):
 
         if len(frame.hands) != 0:
             returnValue = "null"
-            if len(frame.hands) == 1:
+            if frame.hands[0].palm_position.y > 400:
+                province = HandGesture.farAwayGestures(frame)
+                if province != "null":
+                    print " Recorded: " + province
+                    sentence.append(province)
+                    frame_counter = 0
+            elif len(frame.hands) == 1:
                 if frame.hands[0].is_left:
-                    returnValue = HandGesture.numberAnalysis(frame)
+                    returnValue = HandGesture.leftHandAnalysis(frame)
                 else:
-                    returnValue = HandGesture.wordAnalysis(frame)
+                    returnValue = HandGesture.rightHandAnalysis(frame)
             elif len(frame.hands) == 2 and not command_executed:
                 frame_counter += 1
                 if frame_counter == 200:
@@ -67,8 +74,12 @@ class LeapMotionListener(Leap.Listener):
                             print ("Recorded: " + returnValue)
                             sentence.append(returnValue)
                             saved_flag = True
-                    elif returnValue == "n" and last_object == "x":
+                    elif returnValue == "n" and last_object == "x" and frame.hands[0].palm_position.y < 400:
                         nx_counter += 1
+                    elif not saved_flag and returnValue == "Puntarenas":
+                        print ("Recorded: " + returnValue)
+                        sentence.append(returnValue)
+                        saved_flag = True
                     else:
                         print returnValue
 
@@ -80,7 +91,7 @@ class LeapMotionListener(Leap.Listener):
 
                     if last_object == "j":
                         frame_counter += 10
-                    elif returnValue == "10":
+                    elif returnValue == ("10" or "llamar" or "Guanacaste"):
                         frame_counter = 200
                     else:
                         frame_counter += 1
