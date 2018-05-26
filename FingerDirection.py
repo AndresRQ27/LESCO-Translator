@@ -102,4 +102,3 @@ def is_down(vector):
         return True
     else:
         return False
-

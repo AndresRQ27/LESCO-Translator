@@ -19,7 +19,7 @@ def rightHandAnalysis(frame):
     #              + str(finger.tip_position) + " Is extended: " + str(finger.is_extended) \
     #              + " Palm Position: " + str(finger.hand.palm_position)
 
-    if frame.hands[0].palm_position.y < 400:
+    if frame.hands[0].palm_position.y < 500:
         if fingersDirection[0] == "up":
             if fingersDirection[1] == "down":
                 if fingersDirection[2] == "down":
@@ -81,8 +81,8 @@ def rightHandAnalysis(frame):
                             if not thumb_extended:
                                 objectIdentified = "b"
                             else:
-                                if frame.gestures()[0].type == Leap.Gesture.TYPE_SWIPE:
-                                    objectIdentified = "Adios"
+                                if frame.gestures()[0].type == Leap.Gesture.TYPE_SWIPE and abs(frame.hands[0].palm_velocity.x) > 750:
+                                    objectIdentified = "adios"
 
             elif fingersDirection[1] == "left":
                 if fingersDirection[3] != "left":
@@ -93,8 +93,7 @@ def rightHandAnalysis(frame):
             elif fingersDirection[1] == "forward":
                 if fingersDirection[2] == "up":
                     if fingersDirection[3] == "up":
-                        if fingersDirection[4] == "up":
-                            if frame.hands[0].fingers[0].tip_position.x < frame.hands[0].fingers[1].tip_position.x:
+                            if frame.hands[0].fingers[0].tip_position.x < frame.hands[0].fingers[1].tip_position.x + 10:
                                 objectIdentified = "f"
                             else:
                                 objectIdentified = "t"
@@ -106,11 +105,6 @@ def rightHandAnalysis(frame):
                             objectIdentified = "despacio"  # Very to the right
                         elif fingersDirection[4] == "forward":
                             objectIdentified = "e"  # Tilted slightly back, maybe confuse with a
-
-                elif fingersDirection[2] == "down":
-                    if fingersDirection[3] == "down":
-                        if fingersDirection[4] == "down":
-                            objectIdentified = "x"
 
             elif fingersDirection[1] == "right":
                 if fingersDirection[2] == "right":
@@ -148,7 +142,8 @@ def rightHandAnalysis(frame):
                 if fingersDirection[2] == "down":
                     if fingersDirection[3] == "down":
                         if fingersDirection[4] == "down":
-                            objectIdentified = "x"
+                            pass
+                            #objectIdentified = "x"
 
         elif fingersDirection[0] == "down":
             if fingersDirection[1] == "down":
@@ -165,7 +160,7 @@ def leftHandAnalysis(frame):
     thumb_extended = frame.hands[0].fingers[0].is_extended
 
     #print str(fingersDirection)
-    if frame.hands[0].palm_position.y < 400:
+    if frame.hands[0].palm_position.y < 500:
         if fingersDirection[1] == "right":
             if fingersDirection[4] == "left":
                 number = "ella"
